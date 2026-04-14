@@ -36,18 +36,26 @@ if not data.empty:
     # 5. 核心洞察与指标展示
     st.subheader(f"{ticker} 关键指标摘要")
     col1, col2, col3 = st.columns(3)
-    latest_close = float(data['Close'].iloc[-1])
-    previous_close = float(data['Close'].iloc[-2])
+    
+    # 提取收盘价序列并转换为纯数字，增加 squeeze() 防止格式报错
+    close_prices = data['Close'].squeeze()
+    latest_close = float(close_prices.iloc[-1])
+    previous_close = float(close_prices.iloc[-2])
     price_change = latest_close - previous_close
     
     col1.metric("最新收盘价 (Latest Close)", f"${latest_close:.2f}", f"{price_change:.2f}")
-    col2.metric(f"{sma_short}天短期均线", f"${float(data[f'SMA_{sma_short}'].iloc[-1]):.2f}")
-    col3.metric(f"{sma_long}天长期均线", f"${float(data[f'SMA_{long}'].iloc[-1]):.2f}")
+    
+    # 提取均线并展示
+    sma_short_val = float(data[f'SMA_{sma_short}'].squeeze().iloc[-1])
+    sma_long_val = float(data[f'SMA_{sma_long}'].squeeze().iloc[-1])
+    
+    col2.metric(f"{sma_short}天短期均线", f"${sma_short_val:.2f}")
+    col3.metric(f"{sma_long}天长期均线", f"${sma_long_val:.2f}")
 
     # 6. 交互式可视化 (使用 Plotly)
     st.subheader("📊 价格趋势与交互式均线图")
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=data.index, y=data['Close'].squeeze(), mode='lines', name='收盘价 (Close)', line=dict(color='blue')))
+    fig.add_trace(go.Scatter(x=data.index, y=close_prices, mode='lines', name='收盘价 (Close)', line=dict(color='blue')))
     fig.add_trace(go.Scatter(x=data.index, y=data[f'SMA_{sma_short}'].squeeze(), mode='lines', name=f'{sma_short}-Day SMA', line=dict(color='orange')))
     fig.add_trace(go.Scatter(x=data.index, y=data[f'SMA_{sma_long}'].squeeze(), mode='lines', name=f'{sma_long}-Day SMA', line=dict(color='green')))
     
