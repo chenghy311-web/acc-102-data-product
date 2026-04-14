@@ -26,7 +26,7 @@ This app addresses the problem of quickly analyzing stock trends and identifying
 3. Run `streamlit run app.py` in your terminal.
 
 ## 6. Product link / Demo (产品与演示链接)
-- **App Link:** [在这里贴上你部署后的 Streamlit 链接]
+- **App Link:** (https://acc-102-data-appuct-shzjk95znitjwngelchzs4.streamlit.app)
 - **Demo Video:** [在这里贴上你录制的 1-3 分钟演示视频链接]
 
 ## 7. Limitations & next steps (局限性与改进)
